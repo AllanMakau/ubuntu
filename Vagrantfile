@@ -1,9 +1,4 @@
-$script_teste = <<-SCRIPT
-	sudo apt update \
-	sudo apt install software-properties-common \
-	sudo apt-add-repository --yes --update ppa:ansible/ansible \
-	sudo apt install ansible
-SCRIPT
+
 
 
 Vagrant.configure("2") do |config|
@@ -16,8 +11,16 @@ Vagrant.configure("2") do |config|
    v.memory = 1024
    v.cpus = 2
   end
+  
 
-  config.vm.provision "shell", inline:  $script_teste
+  config.vm.provision :ansible_local do |ansible|
+    ansible.install_mode = "default"
+    ansible.playbook = "playbook.yml"
+    ansible.verbose  = true
+    ansible.install  = true
+    ansible.limit    = "all"
+  end
+
   	
 end
 
